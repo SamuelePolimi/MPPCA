@@ -7,7 +7,7 @@ Installation
 First, copy the content of the repository in your favourite location
 
 ```console
-git clone fuffa
+git clone git@github.com:SamuelePolimi/MPPCA.git
 cd MPPCA
 ```
 
