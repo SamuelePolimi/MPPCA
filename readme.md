@@ -1,4 +1,4 @@
-Mixture of Probabilistic Principal Component Analysis (MPPCA)
+Mixture of Probabilistic Principal Component Analysers (MPPCA)
 =============================================================
 
 Installation
