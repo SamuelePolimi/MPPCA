@@ -75,6 +75,18 @@ the first ``14*28`` indexes. The method ``mppca.reconstruction`` will output a p
 ![reconstruction1](plots/mnist_reconstruction.png)
 ![reconstruction2](plots/mnist_reconstruction1.png)
 
+TODO
+----
+
+- [x] Learn a Mixture of Probabilistic PPCA via maximum likelihood approach, as done in 
+- [x] Optimize the computation using cython
+- [x] Use log-transformations to gain numerical stability
+- [x] Save and load the model
+- [x] Sample from the mixture, and reconstruct
+- [ ] Generate more than one sample in parallel
+- [ ] Allow non-standard latent variable (for research purposes)
+
+
 
 
 
