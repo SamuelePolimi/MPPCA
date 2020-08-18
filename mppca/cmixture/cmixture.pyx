@@ -1,3 +1,10 @@
+"""
+Mixture of Probabilistic Principal Component Analysers
+M. tipping and C. bishop, 1999.
+
+Adapted with numerical stabilization techniques
+"""
+
 import numpy as np
 cimport numpy as np
 from libc.math cimport exp
@@ -28,7 +35,7 @@ def sum_logs(X, axis=0, mul=1.):
     :return:
     """
     x_max = np.max(X, axis=axis)
-    X_exp = mul * np.exp(X-x_max)             # not always working
+    X_exp = mul * np.exp(X-x_max)
     return x_max + np.log(np.sum(X_exp, axis=axis))
 
 

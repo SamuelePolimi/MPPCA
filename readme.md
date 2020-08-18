@@ -78,11 +78,12 @@ the first ``14*28`` indexes. The method ``mppca.reconstruction`` will output a p
 TODO
 ----
 
-- [x] Learn a Mixture of Probabilistic PPCA via maximum likelihood approach, as done in 
+- [x] Learn a Mixture of Probabilistic PPCA via maximum likelihood approach, as done in _Mixtures of Probabilistic Principal Component Analysis; M. Tipping, C. Bishop 1999_.
 - [x] Optimize the computation using cython
 - [x] Use log-transformations to gain numerical stability
 - [x] Save and load the model
 - [x] Sample from the mixture, and reconstruct
+- [ ] Comment more and add type suggestion.
 - [ ] Generate more than one sample in parallel
 - [ ] Allow non-standard latent variable (for research purposes)
 

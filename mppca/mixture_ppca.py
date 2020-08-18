@@ -1,3 +1,10 @@
+"""
+Mixture of Probabilistic Principal Component Analysers
+M. tipping and C. bishop, 1999.
+
+Adapted with numerical stabilization techniques
+"""
+
 import numpy as np
 import time
 
@@ -15,7 +22,7 @@ from mppca.cmixture.cmixture import sum_logs, get_covariance, get_log_pi,\
 def get_s(X, log_responsabilities, log_pi, means, component):
     m = X - means[component]
     tot_sum = (m * np.exp(log_responsabilities[component, :, np.newaxis])).T @ m
-    return tot_sum / X.shape[0] / np.exp(log_pi[component])
+    return tot_sum / X.shape[0] / np.exp(log_pi[component])             # eq 24
 
 
 class MPPCA(DictSerializable):
