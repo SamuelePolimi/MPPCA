@@ -137,7 +137,7 @@ class MPPCA(DictSerializable):
         :param noise: Add isotropic noise.
         :return:
         """
-        i = np.random.choice([j for j in range(self.n_components)], p=self.pi)
+        i = np.random.choice([j for j in range(self.n_components)], p=np.exp(self.log_pi))
         if noise:
             return np.random.multivariate_normal(self.means[i], self.covariances[i])
         else:
