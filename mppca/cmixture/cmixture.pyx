@@ -55,7 +55,8 @@ def _update_responsabilities(X: np.ndarray, n_components: int, means: np.ndarray
     P_log = np.zeros((n_components, X.shape[0]))
 
     for i in range(n_components):
-        P_log[i] = multivariate_normal.logpdf(X, means[i], covariances[i])
+        # TODO, we shall not allow singular
+        P_log[i] = multivariate_normal.logpdf(X, means[i], covariances[i], allow_singular=True)
 
     log_scaling = sum_logs(np.array([P_log[j] + log_pi[j]
                                            for j in range(n_components)]), axis=0)

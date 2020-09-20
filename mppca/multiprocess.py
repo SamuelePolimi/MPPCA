@@ -9,6 +9,13 @@ from typing import Iterable, Callable
 
 from herl.utils import Printable
 
+import numpy as np
+
+from joblib import Parallel, delayed
+from typing import Iterable, Callable
+
+from herl.utils import Printable
+
 
 class MultiProcess(Printable):
 
@@ -34,5 +41,6 @@ class MultiProcess(Printable):
                 np.random.seed()
             return process(*args, **kwargs)
 
-        return Parallel(n_jobs=self._n_process, backend=self._backend)(delayed(rnd_process, check_pickle=check_pickle)(*a, **k)
-                                                for a, k in zip(args_params, kwargs_params))
+        return Parallel(n_jobs=self._n_process, backend=self._backend)(
+            delayed(rnd_process, check_pickle=check_pickle)(*a, **k)
+            for a, k in zip(args_params, kwargs_params))
