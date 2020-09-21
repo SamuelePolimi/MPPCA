@@ -44,7 +44,7 @@ class MPPCA(DictSerializable):
 
     load_fn = DictSerializable.get_numpy_load()
 
-    def __init__(self, n_components: int, latent_dimension: int, n_iterations=100, tolerance=1E-5, cov_reg=1E-8):
+    def __init__(self, n_components: int, latent_dimension: int, n_iterations=100, tolerance=1E-5, cov_reg=1E-8, n_init=100):
         """
 
         :param components: Number of components of the mixture model
@@ -57,11 +57,13 @@ class MPPCA(DictSerializable):
         self._initialized = False
         self._tolerance = tolerance
         self._cov_reg = cov_reg
+        self._n_init = n_init
         DictSerializable.__init__(self, DictSerializable.get_numpy_save())
 
     @staticmethod
     def load_from_dict(**kwargs):
-        mppca = MPPCA(kwargs["n_components"], kwargs["latent_dimension"], kwargs["n_iterations"])
+        mppca = MPPCA(kwargs["n_components"], kwargs["latent_dimension"], kwargs["n_iterations"],
+                      n_init=kwargs["_n_init"])
         mppca.log_pi = kwargs["log_pi"]
         mppca.sigma_squared = kwargs["sigma_squared"]
         mppca.means = kwargs["means"]
@@ -90,12 +92,13 @@ class MPPCA(DictSerializable):
                     means=self.means,
                     covariances=self.covariances,
                     linear_transform=self.linear_transform,
-                    _initialized=self._initialized
+                    _initialized=self._initialized,
+                    _n_init=self._n_init
                     )
 
     def _reset(self, X):
         n_samples, observed_dimensions = X.shape
-        kmeans = KMeans(self.n_components)
+        kmeans = KMeans(self.n_components, n_init=self._n_init)
         lab = kmeans.fit(X).predict(X)
         self.covariances = []
         for i in range(self.n_components):
