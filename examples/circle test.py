@@ -42,7 +42,7 @@ for _ in range(10):
     r = np.random.normal(scale=0.1) + 1.
     X = np.array([x_1 * r, x_2 * r])
 
-    Z = np.array([mppca.reconstruction(np.array([x_1]), np.array([0])) for _ in range(10)])
+    Z = np.array([mppca.reconstruction(np.array([x_1]), np.array([0]))[0] for _ in range(10)])
 
     fig, axs = plt.subplots(1, 2)
     axs[0].scatter(x_1, x_2)

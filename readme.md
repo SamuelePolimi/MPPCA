@@ -4,21 +4,21 @@ Mixture of Probabilistic Principal Component Analysers (MPPCA)
 Installation
 ------------
 
-First, copy the content of the repository in your favourite location
+Copy the content of the repository in your favourite location
 
 ```console
 git clone git@github.com:SamuelePolimi/MPPCA.git
 cd MPPCA
 ```
 
-then navigate in ``cmixture`` and compile the ``cython`` script
+<!---then navigate in ``cmixture`` and compile the ``cython`` script)
 
 ```console
 cd mppca/cmixture
 python setup.py build_ext --inplace
-```
+``` -->
 
-Lastly, install the library
+and install the library
 
 ```console
 cd ../..
@@ -83,9 +83,10 @@ TODO
 - [x] Use log-transformations to gain numerical stability
 - [x] Save and load the model
 - [x] Sample from the mixture, and reconstruct
+- [x] Allow non-standard latent variable (for research purposes)
+- [ ] Remove cmixture
 - [ ] Comment more and add type suggestion.
 - [ ] Generate more than one sample in parallel
-- [ ] Allow non-standard latent variable (for research purposes)
 
 
 
