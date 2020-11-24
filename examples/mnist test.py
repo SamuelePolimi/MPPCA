@@ -52,7 +52,7 @@ for i, indx in enumerate(indxs):
     axs[0, i].set_title("Digit #%d" % indx)
     axs[0, i].set_xticks([])
     axs[0, i].set_yticks([])
-    rec_X = mppca.reconstruction(X[indx, :14*28], np.array(range(14*28)), use_mean_latent=False, noise=False)[0]
+    rec_X = mppca.reconstruction(X[indx, :14*28], np.array(range(14*28)), use_mean_latent=False, noise=True)[0]
     axs[1, i].matshow(rec_X.reshape((28, 28)))
     axs[1, i].set_title("Sampled reconstruction")
     axs[1, i].set_xticks([])

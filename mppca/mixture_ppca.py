@@ -384,6 +384,41 @@ class MPPCA(DictSerializable):
 
         return R_log, P_log
 
+    def get_latent(self, X, use_mean_latent=False, noise=True, log_pi_lat=None, mu_lats=None, cov_lats=None):
+        if log_pi_lat is None:
+            log_pi_lat = self.log_pi
+
+        old_log_pi = np.copy(self.log_pi)
+
+        if mu_lats is None:
+            mu_lats = np.zeros((self.n_components, self.latent_dimension))
+        if cov_lats is None:
+            cov_lats = [np.eye(self.latent_dimension) for i in range(self.n_components)]
+
+        r, p = self.get_responsabilities(X, np.array(range(self.means[0].shape[0])), log_pi_lat, mu_lats, cov_lats)
+
+        cluster = np.argmax(p)
+        mu_lat = mu_lats[cluster]
+        cov_lat = cov_lats[cluster]
+
+        W = self.linear_transform[cluster]
+        mean = self.means[cluster]
+        obs_dimension = mean.shape[0]
+        sigma_sq = self.sigma_squared[cluster]
+
+        W_sq = W.T @ W
+        M_inv = np.linalg.inv(self.sigma_squared[cluster]*np.eye(W_sq.shape[0]) + W_sq)
+        new_val = X
+        mean_latent = M_inv @ W.T @ (new_val - self.means[cluster])
+        cov_latent = self.sigma_squared[cluster] * M_inv
+        if use_mean_latent:
+            latent = mean_latent
+        else:
+            latent = np.random.multivariate_normal(mean_latent, cov_latent)
+
+        return latent, cluster
+
+
     def reconstruction(self, X, idx, use_mean_latent=False, noise=True, log_pi_lat=None, mu_lats=None, cov_lats=None):
 
         if log_pi_lat is None:
