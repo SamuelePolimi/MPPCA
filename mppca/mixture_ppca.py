@@ -34,7 +34,16 @@ def truncated_eigendecomp(mat, k):
 def get_sigma_linear_tr(S, latent_dimension, component):
     U, L, sigma = truncated_eigendecomp(S[component], latent_dimension)
 
-    return sigma, U @ scipy.linalg.sqrtm(L - sigma * np.eye(latent_dimension))    # eq 14
+    Z = L - sigma * np.eye(latent_dimension)
+    try:
+        np.linalg.cholesky(Z)
+    except:
+        print("Not Positive Definite", flush=True)
+    try:
+        ret = sigma, U @ scipy.linalg.sqrtm(Z)    # eq 14
+    except:
+        print("Error SQRTM", flush=True)
+    return ret
 
 
 def _update_responsabilities(X: np.ndarray, n_components: int, means: np.ndarray, covariances: np.ndarray,
@@ -66,6 +75,7 @@ def _update_responsabilities(X: np.ndarray, n_components: int, means: np.ndarray
 
 
 def get_mean(X, log_responsabilities, component):
+
     n_samples = log_responsabilities.shape[1]
     return np.sum([X[i] * np.exp(log_responsabilities[component, i])
             for i in range(n_samples)], axis=0) / np.exp(sum_logs(log_responsabilities[component]))
@@ -77,6 +87,7 @@ def get_log_pi(log_responsabilities: np.ndarray):
     :param log_responsabilities:
     :return:
     """
+
     n_samples = log_responsabilities.shape[1]
     return sum_logs(log_responsabilities.T, axis=0, mul=1. / n_samples).T   # eq 22
 
@@ -213,7 +224,7 @@ class MPPCA(DictSerializable):
         if len(X.shape) != 2:
             raise Exception("The shape of X must be of two dimensions.")
 
-        mp = MultiProcess(n_process=23, backend="threading")
+        mp = MultiProcess(n_process=23, backend="none")
 
         if not self._initialized:
             self._reset(X)
@@ -239,6 +250,11 @@ class MPPCA(DictSerializable):
 
                 res = mp.compute(lambda i: get_sigma_linear_tr(S, self.latent_dimension, i), args, kw_args,
                                  check_pickle=False)
+
+                # res = []
+                # for i in ragne(self.n_components):
+                #     res.append(get_sigma_linear_tr(S, self.latent_dimension, i))
+
 
                 for j in range(self.n_components):
                     self.sigma_squared[j], self.linear_transform[j] = res[j]
@@ -292,8 +308,13 @@ class MPPCA(DictSerializable):
 
                 # print(start - time.time())
 
-                res = mp.compute(lambda i: get_sigma_linear_tr(S, self.latent_dimension, i), args, kw_args,
-                                 check_pickle=False)
+                # res = mp.compute(lambda i: get_sigma_linear_tr(S, self.latent_dimension, i), args, kw_args,
+                #                  check_pickle=False)
+
+                res = []
+                for i in ragne(self.n_components):
+                    res.append(get_sigma_linear_tr(S, self.latent_dimension, i))
+
 
                 for j in range(self.n_components):
                     self.sigma_squared[j], self.linear_transform[j] = res[j]
