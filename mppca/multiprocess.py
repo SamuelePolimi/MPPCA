@@ -42,7 +42,7 @@ class MultiProcess(Printable):
             return process(*args, **kwargs)
 
         if self._backend == "none":
-            return [rnd_process(a, k) for a, k in zip(args_params, kwargs_params)]
+            return [rnd_process(*a, **k) for a, k in zip(args_params, kwargs_params)]
 
         return Parallel(n_jobs=self._n_process, backend=self._backend)(
             delayed(rnd_process)(*a, **k)

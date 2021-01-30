@@ -271,7 +271,7 @@ class MPPCA(DictSerializable):
                 if np.abs(current_log_likelihood - log_likelihood) <= self._tolerance:
                     return
                 log_likelihood = current_log_likelihood
-                print(log_likelihood)
+                print("log_likelihood:", log_likelihood)
 
             except:
                 self.means, self.covariances, self.linear_transform, self.sigma_squared, self.log_pi = state
@@ -514,6 +514,6 @@ class MPPCA(DictSerializable):
         cov_bb = covariance[indx_b][:, indx_b] + reg_cov_bb * np.eye(len(idx))
 
         inv_cov_bb = np.linalg.inv(cov_bb)
-        mu_a_b = mu_a + cov_ab @ inv_cov_bb @ (X - mu_b)
+        mu_a_b = mu_a + cov_ab @ np.linalg.solve(cov_bb, X-mu_b)#inv_cov_bb @ (X - mu_b)
 
-        return mu_a_b, cov_aa - cov_ab @ inv_cov_bb @ cov_ab.T
+        return mu_a_b, cov_aa - cov_ab @ np.linalg.solve(cov_bb, cov_ab.T)#inv_cov_bb @ cov_ab.T
