@@ -7,14 +7,13 @@ import numpy as np
 from joblib import Parallel, delayed
 from typing import Iterable, Callable
 
-from herl.utils import Printable
+from mppca.utils import Printable
 
 import numpy as np
 
 from joblib import Parallel, delayed
 from typing import Iterable, Callable
 
-from herl.utils import Printable
 
 
 class MultiProcess(Printable):
